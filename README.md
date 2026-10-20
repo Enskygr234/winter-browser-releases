@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">Winter Browser</h1>
-<p align="center"><b>Fütüristik, kaynak dostu, eklenti destekli masaüstü tarayıcı</b><br>Windows 10 / 11 · 64 bit</p>
+<p align="center"><b>Fütüristik, kaynak dostu tarayıcı</b><br>Windows 10 / 11 · Android 8.0+</p>
 
 <p align="center">
   <a href="https://github.com/Enskygr234/winter-browser-releases/releases/latest"><b>⬇ Son sürümü indir</b></a>
@@ -22,13 +22,27 @@
 - Bölünmüş ekran, çalışma alanları, WhatsApp/Telegram/Discord/Spotify yan panelleri, gizli sekmeler
 - Komut merkezi (`Ctrl+K`), ekran görüntüsü, resim içinde resim (PiP), sayfa çevirisi, notlar
 
+## Android
+
+Aynı Winter tasarımı ve mantığı telefonda: altta başparmak menzilinde yüzen kapsül, yörünge saatli Merkez,
+kaydırmalı sekme kartları, reklam engelleyici, YouTube reklam atlayıcı, Google skini, gizli sekmeler ve masaüstü sitesi modu.
+Chrome eklentileri, bölünmüş ekran ve yan paneller yalnızca Windows sürümünde var.
+
 ## Kurulum
 
+**Windows**
 1. [Releases](https://github.com/Enskygr234/winter-browser-releases/releases/latest) sayfasından `WinterBrowser-Setup-x.y.z.exe` dosyasını indir.
 2. Dosyayı çalıştır ve kurulumu tamamla.
 
 > Kurulum dosyası dijital olarak imzalı olmadığı için Windows SmartScreen uyarı verebilir:
 > **Ek bilgi → Yine de çalıştır**.
+
+**Android**
+1. Telefonundan [Releases](https://github.com/Enskygr234/winter-browser-releases/releases/latest) sayfasını açıp `WinterBrowser-Android-x.y.z.apk` dosyasını indir.
+2. Dosyayı aç. Telefon "bilinmeyen uygulamalar" izni isterse tarayıcına izin ver ve kur.
+3. İstersen Ayarlar → Uygulamalar → Varsayılan uygulamalar → Tarayıcı'dan Winter'ı varsayılan yap.
+
+> Uygulama Google Play dışından kurulduğu için Play Protect uyarı gösterebilir.
 
 ## Sorun bildirme
 
