@@ -1,0 +1,45 @@
+name: Kod repolarını gizle
+# Telefondan: Actions → "Kod repolarını gizle" → Run workflow → "evet" yaz → Run.
+# Gerekli: bu repoda ADMIN_TOKEN adlı secret (Administration, Contents, Secrets,
+# Actions: Read and write izinli, "All repositories" kapsamlı fine-grained token).
+on:
+  workflow_dispatch:
+    inputs:
+      onay:
+        description: 'Kod repolarının hepsi gizlenecek. Onaylıyorsan "evet" yaz.'
+        required: true
+        default: "hayir"
+permissions:
+  contents: read
+jobs:
+  gizle:
+    if: ${{ github.event.inputs.onay == 'evet' }}
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.ADMIN_TOKEN }}
+      SAHIP: Enskygr234
+    steps:
+      - name: Token var mı?
+        run: |
+          [ -n "$GH_TOKEN" ] || { echo "::error::ADMIN_TOKEN secret'ı eklenmemiş."; exit 1; }
+          gh api user -q .login
+      - name: Eczane verisi için SITE_TOKEN'ı ayarla
+        run: gh secret set SITE_TOKEN -R "$SAHIP/Nobet-ecza" --body "$GH_TOKEN"
+      - name: Repoları gizle
+        run: |
+          ACIK_KALSIN="enskygr234.github.io winter-browser-releases enskygr234"
+          gh repo list "$SAHIP" --visibility public --limit 200 --json name -q '.[].name' > liste.txt
+          while read -r r; do
+            k=$(echo "$r" | tr 'A-Z' 'a-z')
+            case " $ACIK_KALSIN " in *" $k "*) echo "açık kalıyor: $r"; continue;; esac
+            gh repo edit "$SAHIP/$r" --visibility private --accept-visibility-change-consequences && echo "gizlendi: $r"
+          done < liste.txt
+          echo "--- Hâlâ herkese açık olanlar:"; gh repo list "$SAHIP" --visibility public --limit 200 --json name -q '.[].name'
+      - name: Eczane verisini bir kez güncelle
+        run: gh workflow run guncelle.yml -R "$SAHIP/Nobet-ecza" || echo "Eczane güncellemesi başlatılamadı (sonra kendiliğinden çalışır)."
+      - name: Eski adresler yeni siteden açılıyor mu?
+        run: |
+          sleep 120
+          for p in "" Winterball/ ayazle/ kizak/ mahalle/ Nobet-ecza/ oyuncu-merkez/ Son-Tren/ mont-al/ kar-js/ ensdewloper.github.io/ ensdewloper.github.io/son-vardiya/; do
+            c=$(curl -s -o /dev/null -w "%{http_code}" "https://enskygr234.github.io/$p"); echo "$c https://enskygr234.github.io/$p"
+          done
