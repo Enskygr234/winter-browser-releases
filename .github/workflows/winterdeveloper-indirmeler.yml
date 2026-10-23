@@ -1,0 +1,33 @@
+name: Winterdeveloper indirmelerini kopyala
+on:
+  workflow_dispatch:
+  push:
+    paths: [".github/tasima/liste.tsv"]
+permissions:
+  contents: write
+jobs:
+  kopyala:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dosyalari indir ve yayinla
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          while IFS=$'\t' read -r tag title url; do
+            [ -z "$tag" ] && continue
+            mkdir -p "d/$tag"
+            f="d/$tag/$(basename "$url")"
+            curl -fsSL --retry 3 -o "$f" "$url"
+            echo "$tag $(basename "$url") $(stat -c %s "$f")"
+          done < .github/tasima/liste.tsv
+          for dir in d/*/; do
+            tag=$(basename "$dir")
+            title=$(awk -F'\t' -v t="$tag" '$1==t{print $2; exit}' .github/tasima/liste.tsv)
+            if gh release view "$tag" >/dev/null 2>&1; then
+              gh release upload "$tag" "$dir"* --clobber
+            else
+              gh release create "$tag" "$dir"* --title "$title" --notes "Winterdeveloper indirme dosyası." --latest=false
+            fi
+          done
